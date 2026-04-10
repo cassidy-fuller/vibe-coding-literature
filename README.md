@@ -1,3 +1,213 @@
 # "Vibe-coding" literature
 
 This repository is a **work in progress** and is being built incrementally as I read and synthesize academic literature on "vibe-coding" and prompting techniques.
+
+# Which Prompting Technique Should I Use? An Empirical Investigation of Prompting Techniques for Software Engineering Tasks
+
+These are my notes on Which Prompting Technique Should I Use? An Empirical Investigation of Prompting Techniques for Software Engineering Tasks. You can read the full article here: https://arxiv.org/html/2506.05614v1
+
+The researches surveyed 14 different prompting techniques in 4 different AI models across 13 different software engineering tasks.
+
+Here are the 14 types. 
+I will leave the original academic description and then rephrase below in simpler terms. 
+
+
+1. Exemplar Selection KNN (ES-KNN): 
+
+ACADEMIC DESCRIPTION:
+Selects exemplars using a k-nearest neighbor approach to enrich the prompt context. In detail, the data samples from the full original dataset (excluding the current data sample to be queried) are transformed into vector embeddings using a code-optimized embedding model[47]. We selected the most widely adopted and top-performing embedding model available at the time of our experiment. Depending on the SE task, since the data samples may consist of source code, natural language, or both, we selected a multilingual embedding model that was trained with both natural language and multiple programming languages. We then computed cosine similarity between the current sample and encoded data samples to retrieve the top-k nearest neighbor samples, which were selected as in-context exemplars to be added to the prompt. We selected the most freqency used and best performing.
+
+MY NOTES:
+This is the most complicated prompting technique, but proves later to be the most effective. 
+
+To understand this, we first have to understand that in machine learning, absolutely every data point is turned into a vector of numbers. A lot of numbers. The numbers all have relationships to each other (represented by other numbers).
+
+A K-nearest neighbor (KNN) algorythim is an algorythm commonly used in machine learning to find two peices of data that are most similar to each other. So, for example, if I had a dataset of pictures of animals, a picture of a white cat's K nearest neighbor might be a picture of a grey cat.
+
+So, in our ES-KNN example, you're finding a similar data point to input you're working with, then find a similar data point to the output you desire. You feed the AI both vectors of numbers of the data points, then give it a vector of numbers of your input.
+
+2. Few Shot Contrastive CoT (CCoT)
+
+ACADEMIC DESCRIPTION:
+Uses both correct and incorrect chain-of-thought examples to refine reasoning steps.
+
+MY NOTES:
+Here's an example from the paper that this one cites (https://arxiv.org/pdf/2311.09277)
+
+3. Tree Of Thought (TroT)
+
+ACADEMIC DESCRIPTION:
+Structures multiple branching reasoning paths to explore diverse solution strategies for complex design problems.
+
+MY NOTES:
+Here's the paper they cite that originally proposed tree of thought as a way of prompting: https://arxiv.org/pdf/2305.10601
+
+And here's a youtube video that does a great job of breaking down the paper: https://www.youtube.com/watch?v=ut5kp56wW_4&t=1s
+
+Basically, Tree of Thought is asking the model to break the problem down into steps, then come up with multiple ideas for approaching each step. You then ask it to self-evaluate which combination of steps would give the best output.
+
+4. Self Ask (SA)
+
+ACADEMIC DESCRIPTION:
+Makes the model generate its own follow-up questions before answering, which helps it break down and solve complex problems step by step.
+
+MY NOTES:
+This is the paper it cites: https://arxiv.org/pdf/2210.03350
+
+And here is a youtube video demoing the Self Ask prompting method from the actual organization who published that paper (Ofir press): https://www.youtube.com/watch?v=eXrNVnmxxAo
+
+Here's the github repo where you could try Self Ask yourself: https://github.com/ofirpress/self-ask/tree/main
+
+
+5. Universal Self Consistency (USC)
+   
+ACADEMIC DESCRIPTION:
+ Combines multiple answers from the model and uses a meta-prompt to pick the most consistent one, improving output reliability.
+
+MY NOTES:
+This one is pretty self explanatory, but here's a youtube video about it if you'd like to learn more: https://www.youtube.com/watch?v=srVo5zhHLLE
+
+
+6. Self Refine (SR)
+   
+ACADEMIC DESCRIPTION:
+Iteratively improves initial responses by self-evaluating and updating code explanations or solutions.
+
+MY NOTES:
+This one's pretty self explanatory.
+Here's the research paper they cite: https://arxiv.org/pdf/2303.17651
+And here's a youtube video: https://www.youtube.com/watch?v=Vumne1V6enQ
+And a github repo: https://github.com/madaan/self-refine
+
+7. Self-Generated In-Context Learning (SG-ICL)
+   
+ACADEMIC DESCRIPTION:
+Automatically generates in-context exemplars to simulate few-shot learning, streamlining prompt formulation for coding tasks.
+
+MY NOTES:
+
+This youtube video at 00:15:46 has some info: https://www.youtube.com/watch?v=0iuKM_e_jvk&t=946s
+
+8. Thread Of Thought (ToT): 
+
+ACADEMIC DESCRIPTION:
+This technique guides the LLMs to work through a problem step by step, focusing on breaking down a large or complex task into smaller, manageable parts. For example, instead of solving everything at once, the model is told to pause, summarize, and analyze each step before moving to the next step, making the reasoning process more organized and clear.
+
+MY NOTES:
+Pretty self explanatory. 
+
+Here's the paper they cite: https://arxiv.org/pdf/2311.08734
+
+9. Step Back Prompting(SBP)
+
+ACADEMIC DESCRIPTION:
+With step back prompting, the model is first asked to examine the problem as a whole and think about the key ideas or main facts, before drafting the solution. This helps the LLMs to plan ahead and avoid jumping into details.
+
+MY NOTES:
+Paper they cite: https://arxiv.org/pdf/2310.06117
+
+10. Emotional Prompting (EP)
+    
+ACADEMIC DECRIPTION:
+ Incorporates affective language to shape engaging and empathetic responses, useful in writing user-friendly documentation or error messages.
+
+MY NOTES:
+Here's the paper they cite: https://arxiv.org/pdf/2307.11760
+This one is fascinating. A snippet from the abstract: "...Our automatic experiments show that LLMs have a grasp of emotional intelligence, and their performance can be improved with emotional prompts (which we call “EmotionPrompt” that combines the original prompt with emotional stimuli), e.g., 8.00% relative performance improvement in Instruction Induction and 115% in BIG-Bench" and "...Our human study results demonstrate that EmotionPrompt significantly boosts the performance of generative tasks (10.9% average improvement in terms of performance, truthfulness, and responsibility metrics)"
+
+
+11. Style Prompting (SP)
+    
+ACADEMIC DESCRIPTION:
+Directs the model to adopt a specific tone or format, ensuring that generated code comments and documentation align with a desired style.
+
+MY NOTES:
+They cite this paper: https://arxiv.org/pdf/2302.09185, which is less directly related to the promt technique than other papers were. This paper seems to measuring how well LLMs can meet style and tone requirements (not too well, it seems, at least in 2023 when this was published).
+
+
+12. Rephrase and Respond (RR)
+    
+ACADEMIC DESCRIPTION:
+ This technique asks the LLMs to first restate the question in its own words and add any extra details if needed, before giving an answer. By making the LLM explain the question to itself, the model is assumed to be more likely to fully understand what is being asked and give a more accurate and detailed response.
+
+ MY NOTES:
+ Pretty self explanatory again.
+ Here's the paper: https://arxiv.org/pdf/2311.04205
+ And here's a youtube video: https://www.youtube.com/watch?v=u8ER1Z3xH1w
+
+13. Role Prompting (RP)
+    
+ACADEMIC DESCRIPTION:
+ Assigns a specific persona—such as a code reviewer or developer—to tailor responses to the nuances of specific SE tasks.
+
+ MY NOTES:
+ Pretty self explanatory.
+ Here's the paper they cite: https://arxiv.org/pdf/2310.00746
+
+
+14. Analogical Prompting (AP)
+    
+ACADEMIC DESCRIPTION:
+ This technique prompts the LLMs to use analogies to make code explanations or design ideas easier to understand. This helps turn complex or abstract data structures or algorithms into relatable, real-world examples.
+
+MY NOTES: 
+Paper: https://arxiv.org/pdf/2310.01714
+
+
+Now on to the 13 types of coding tasks they tested each prompting method on. In the orginal paper, they don't define each task type, they just link to another study. I'll define them here.
+Note that they weren't defined in the original paper; I found other papers which define these SE tasks.
+https://arxiv.org/pdf/2102.04664
+
+
+Defect Detection (DD)
+The objective is to identify whether a body of source code contains defects that may be used to attack software systems, such as resource leaks, use-after-free vulnerabilities, and DoS attack.
+
+Clone Detection (CD) 
+The task is to measure the semantic similarity between codes. This includes two subtasks: binary classification between a pair of codes and code retrieval, where the goal
+is to find semantically similar codes.
+
+Exception Type Prediction (ET)
+Predict what kind of error a piece of code will throw.
+
+Code Question Answering (QA)
+Answer natural language questions about code.
+
+Code Translation (CT)
+It involves translating a code from one programming language to a different one.
+
+Bug Fixing (BF)
+Automatic bug fixing (aka program repair) aims to generate patches that remove bugs without breaking the program.
+
+Mutant Generation (MG)
+Injecting small faults (“mutants”) into code to evaluate testing or debugging systems.
+
+Assert Generation (AG)
+Generate test statements that check if code behaves correctly.
+
+Code Summarization (SM)
+The objective is to generate the natural language comment for a code.
+
+Code Generation (CG)
+This aims to generate a code via a natural language description.
+
+
+On to the fun part: the results!
+
+| Task                   | Aggregate |
+|------------------------|----------|
+| Understanding Tasks    | ES-KNN   |
+| Defect detection       | ToT      |
+| Clone detection        | ES-KNN   |
+| Exception type         | ES-KNN   |
+| Code QA                | USC      |
+| Generation Tasks       | ES-KNN   |
+| Code translation       | ES-KNN   |
+| Bug fixing             | Control  |
+| Mutant generation      | ES-KNN   |
+| Assert generation      | ES-KNN   |
+| Code summarization     | Control  |
+| Code generation        | USC      |
+
+Let's look at just the aggregate column; different models behaved slightly differently. Most tasks were most efficient when promted with ES-KNN, the complicated number vector one.
+
+However, Code Generation (and Code Question Answering) were best with Universal Self Consistency.
